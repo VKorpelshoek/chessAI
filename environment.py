@@ -19,10 +19,12 @@ engine = chess.engine.SimpleEngine.popen_uci("/Users/vnc/Desktop/chessAI/stockfi
 board = chess.Board()
 
 while not board.is_game_over():
+    print(list(board.legal_moves))
     result = engine.play(board, chess.engine.Limit(time=0.00001))
     
     evaluation = stockfish_evaluation(board)
     print(evaluation)
+
 
     print(board)
     print("\n\n")
