@@ -2,9 +2,17 @@ import chess
 import chess.engine
 
 def stockfish_evaluation(board, time_limit = 0.00001):
-    result = engine.analyse(board, chess.engine.Limit(time=time_limit))
-    print(result)
-    return result['score']
+    result = engine.analyse(board, chess.engine.Limit(time=time_limit))['score']
+    
+    stringResult = str(result.relative)
+    if(stringResult.startswith('+')):
+        return int(stringResult[1:])/100
+    elif(stringResult.startswith('-')):
+        return int(stringResult)/100
+    elif(stringResult.startswith('#+')):
+        return int(35000 - 100*int(stringResult[2:]))/100
+    elif(stringResult.startswith('#-')):
+        return ((35000 - 100*int(stringResult[2:]))*-1)/100
 
 engine = chess.engine.SimpleEngine.popen_uci("/Users/vnc/Desktop/chessAI/stockfish")
 
@@ -14,12 +22,7 @@ while not board.is_game_over():
     result = engine.play(board, chess.engine.Limit(time=0.00001))
     
     evaluation = stockfish_evaluation(board)
-    print(evaluation.relative, end=' ')
-
-    if(evaluation.turn == True):
-        print("WHITE\n")
-    else:
-        print("BLACK\n")
+    print(evaluation)
 
     print(board)
     print("\n\n")
